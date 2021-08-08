@@ -1135,6 +1135,138 @@ var require_cookie = __commonJS({
   }
 });
 
+// node_modules/@splitbee/web/dist/web.cjs.production.min.js
+var require_web_cjs_production_min = __commonJS({
+  "node_modules/@splitbee/web/dist/web.cjs.production.min.js"(exports) {
+    init_shims();
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var e = typeof window != "undefined";
+    var t = [];
+    var o = function() {
+      e && !window.splitbee || (n.track = window.splitbee.track, n.user = window.splitbee.user, n.enableCookie = window.splitbee.enableCookie, t.forEach(function(e2) {
+        e2.type === "event" ? window.splitbee.track.apply(null, e2.payload) : e2.type === "user" ? window.splitbee.user.set.apply(null, e2.payload) : e2.type === "enableCookie" && window.splitbee.enableCookie();
+      }), t = []);
+    };
+    var i = function(i2) {
+      return function() {
+        try {
+          for (var n2 = arguments.length, r = new Array(n2), a = 0; a < n2; a++)
+            r[a] = arguments[a];
+          return t.push({ type: i2, payload: r }), e && window.splitbee && o(), Promise.resolve();
+        } catch (e2) {
+          return Promise.reject(e2);
+        }
+      };
+    };
+    var n = { track: i("event"), user: { set: i("user") }, init: function(t2) {
+      if (e && !window.splitbee) {
+        var i2 = window.document, n2 = t2 != null && t2.scriptUrl ? t2.scriptUrl : "https://cdn.splitbee.io/sb.js", r = i2.querySelector("script[src='" + n2 + "']");
+        if (r)
+          r.onload = o;
+        else {
+          var a = i2.createElement("script");
+          a.src = n2, a.async = true, t2 && (t2.apiUrl && (a.dataset.api = t2.apiUrl), t2.token && (a.dataset.token = t2.token), t2.disableCookie && (a.dataset.noCookie = "1")), a.onload = o, i2.head.appendChild(a);
+        }
+      }
+    }, enableCookie: i("enableCookie") };
+    exports.default = n;
+  }
+});
+
+// node_modules/@splitbee/web/dist/web.cjs.development.js
+var require_web_cjs_development = __commonJS({
+  "node_modules/@splitbee/web/dist/web.cjs.development.js"(exports) {
+    init_shims();
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var isBrowser = typeof window !== "undefined";
+    var SCRIPT_URL = "https://cdn.splitbee.io/sb.js";
+    var queue = [];
+    var handleLoad = function handleLoad2() {
+      if (isBrowser && !window.splitbee)
+        return;
+      splitbee.track = window.splitbee.track;
+      splitbee.user = window.splitbee.user;
+      splitbee.enableCookie = window.splitbee.enableCookie;
+      queue.forEach(function(ev) {
+        if (ev.type === "event")
+          window.splitbee.track.apply(null, ev.payload);
+        else if (ev.type === "user")
+          window.splitbee.user.set.apply(null, ev.payload);
+        else if (ev.type === "enableCookie")
+          window.splitbee.enableCookie();
+      });
+      queue = [];
+    };
+    var createAddToQueue = function createAddToQueue2(type) {
+      return function() {
+        try {
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          queue.push({
+            type,
+            payload: args
+          });
+          if (isBrowser && window.splitbee) {
+            handleLoad();
+          }
+          return Promise.resolve();
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      };
+    };
+    var initSplitbee = function initSplitbee2(options2) {
+      if (!isBrowser || window.splitbee)
+        return;
+      var document = window.document;
+      var scriptUrl = options2 !== null && options2 !== void 0 && options2.scriptUrl ? options2.scriptUrl : SCRIPT_URL;
+      var injectedScript = document.querySelector("script[src='" + scriptUrl + "']");
+      if (injectedScript) {
+        injectedScript.onload = handleLoad;
+        return;
+      }
+      var script = document.createElement("script");
+      script.src = scriptUrl;
+      script.async = true;
+      if (options2) {
+        if (options2.apiUrl)
+          script.dataset.api = options2.apiUrl;
+        if (options2.token)
+          script.dataset.token = options2.token;
+        if (options2.disableCookie)
+          script.dataset.noCookie = "1";
+      }
+      script.onload = handleLoad;
+      document.head.appendChild(script);
+    };
+    var splitbee = {
+      track: /* @__PURE__ */ createAddToQueue("event"),
+      user: {
+        set: /* @__PURE__ */ createAddToQueue("user")
+      },
+      init: initSplitbee,
+      enableCookie: /* @__PURE__ */ createAddToQueue("enableCookie")
+    };
+    exports.default = splitbee;
+  }
+});
+
+// node_modules/@splitbee/web/dist/index.js
+var require_dist = __commonJS({
+  "node_modules/@splitbee/web/dist/index.js"(exports, module2) {
+    init_shims();
+    "use strict";
+    if (process.env.NODE_ENV === "production") {
+      module2.exports = require_web_cjs_production_min();
+    } else {
+      module2.exports = require_web_cjs_development();
+    }
+  }
+});
+
 // .svelte-kit/vercel/entry.js
 __export(exports, {
   default: () => entry_default
@@ -2446,6 +2578,7 @@ function v4() {
 }
 
 // .svelte-kit/output/server/app.js
+var import_web = __toModule(require_dist());
 function noop2() {
 }
 function run(fn) {
@@ -2621,9 +2754,9 @@ function init(settings = default_settings) {
     amp: false,
     dev: false,
     entry: {
-      file: "/./_app/start-df9abcd9.js",
+      file: "/./_app/start-d115fccc.js",
       css: ["/./_app/assets/start-a8cd1609.css"],
-      js: ["/./_app/start-df9abcd9.js", "/./_app/chunks/vendor-afb36f77.js"]
+      js: ["/./_app/start-d115fccc.js", "/./_app/chunks/vendor-adcc9350.js"]
     },
     fetched: void 0,
     floc: false,
@@ -2740,7 +2873,7 @@ var module_lookup = {
     return index;
   })
 };
-var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "/./_app/pages/__layout.svelte-ea90a491.js", "css": ["/./_app/assets/pages/__layout.svelte-13d512cb.css"], "js": ["/./_app/pages/__layout.svelte-ea90a491.js", "/./_app/chunks/vendor-afb36f77.js"], "styles": [] }, ".svelte-kit/build/components/error.svelte": { "entry": "/./_app/error.svelte-277c6eec.js", "css": [], "js": ["/./_app/error.svelte-277c6eec.js", "/./_app/chunks/vendor-afb36f77.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "/./_app/pages/index.svelte-920081aa.js", "css": ["/./_app/assets/pages/index.svelte-dd763a63.css"], "js": ["/./_app/pages/index.svelte-920081aa.js", "/./_app/chunks/vendor-afb36f77.js"], "styles": [] }, "src/routes/kalm-routines-privacy-policy.svelte": { "entry": "/./_app/pages/kalm-routines-privacy-policy.svelte-f6e12642.js", "css": ["/./_app/assets/pages/kalm-routines-privacy-policy.svelte-2b976b5c.css"], "js": ["/./_app/pages/kalm-routines-privacy-policy.svelte-f6e12642.js", "/./_app/chunks/vendor-afb36f77.js", "/./_app/chunks/env-a13806e5.js"], "styles": [] }, "src/routes/kalm-routines-terms.svelte": { "entry": "/./_app/pages/kalm-routines-terms.svelte-ef1c45e8.js", "css": ["/./_app/assets/pages/kalm-routines-privacy-policy.svelte-2b976b5c.css"], "js": ["/./_app/pages/kalm-routines-terms.svelte-ef1c45e8.js", "/./_app/chunks/vendor-afb36f77.js", "/./_app/chunks/env-a13806e5.js"], "styles": [] }, "src/routes/about.svelte": { "entry": "/./_app/pages/about.svelte-939edcb7.js", "css": ["/./_app/assets/pages/kalm-routines-privacy-policy.svelte-2b976b5c.css"], "js": ["/./_app/pages/about.svelte-939edcb7.js", "/./_app/chunks/vendor-afb36f77.js", "/./_app/chunks/env-a13806e5.js"], "styles": [] }, "src/routes/todos/index.svelte": { "entry": "/./_app/pages/todos/index.svelte-2be32a2c.js", "css": ["/./_app/assets/pages/todos/index.svelte-05e41044.css"], "js": ["/./_app/pages/todos/index.svelte-2be32a2c.js", "/./_app/chunks/vendor-afb36f77.js"], "styles": [] } };
+var metadata_lookup = { "src/routes/__layout.svelte": { "entry": "/./_app/pages/__layout.svelte-d02ea5ab.js", "css": ["/./_app/assets/pages/__layout.svelte-15ffb026.css"], "js": ["/./_app/pages/__layout.svelte-d02ea5ab.js", "/./_app/chunks/vendor-adcc9350.js"], "styles": [] }, ".svelte-kit/build/components/error.svelte": { "entry": "/./_app/error.svelte-9d0b6417.js", "css": [], "js": ["/./_app/error.svelte-9d0b6417.js", "/./_app/chunks/vendor-adcc9350.js"], "styles": [] }, "src/routes/index.svelte": { "entry": "/./_app/pages/index.svelte-4ab61053.js", "css": ["/./_app/assets/pages/index.svelte-dd763a63.css"], "js": ["/./_app/pages/index.svelte-4ab61053.js", "/./_app/chunks/vendor-adcc9350.js"], "styles": [] }, "src/routes/kalm-routines-privacy-policy.svelte": { "entry": "/./_app/pages/kalm-routines-privacy-policy.svelte-c4d9f24b.js", "css": ["/./_app/assets/pages/kalm-routines-privacy-policy.svelte-2b976b5c.css"], "js": ["/./_app/pages/kalm-routines-privacy-policy.svelte-c4d9f24b.js", "/./_app/chunks/vendor-adcc9350.js", "/./_app/chunks/env-a13806e5.js"], "styles": [] }, "src/routes/kalm-routines-terms.svelte": { "entry": "/./_app/pages/kalm-routines-terms.svelte-c2c38091.js", "css": ["/./_app/assets/pages/kalm-routines-privacy-policy.svelte-2b976b5c.css"], "js": ["/./_app/pages/kalm-routines-terms.svelte-c2c38091.js", "/./_app/chunks/vendor-adcc9350.js", "/./_app/chunks/env-a13806e5.js"], "styles": [] }, "src/routes/about.svelte": { "entry": "/./_app/pages/about.svelte-b94502d1.js", "css": ["/./_app/assets/pages/kalm-routines-privacy-policy.svelte-2b976b5c.css"], "js": ["/./_app/pages/about.svelte-b94502d1.js", "/./_app/chunks/vendor-adcc9350.js", "/./_app/chunks/env-a13806e5.js"], "styles": [] }, "src/routes/todos/index.svelte": { "entry": "/./_app/pages/todos/index.svelte-8cc37863.js", "css": ["/./_app/assets/pages/todos/index.svelte-05e41044.css"], "js": ["/./_app/pages/todos/index.svelte-8cc37863.js", "/./_app/chunks/vendor-adcc9350.js"], "styles": [] } };
 async function load_component(file) {
   return {
     module: await module_lookup[file](),
@@ -2854,24 +2987,25 @@ var Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	<a href="${"https://github.com/armincerf/kalm-mobile"}" class="${"github-corner svelte-18swksg"}" aria-label="${"View Kalm Routines source on GitHub"}"><svg width="${"80"}" height="${"80"}" viewBox="${"0 0 250 250"}" style="${"fill:#fff; position: absolute; top: 0; border: 0; right: 0;"}" aria-hidden="${"true"}" class="${"svelte-18swksg"}"><path d="${"M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"}"></path><path d="${"M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"}" fill="${"black"}" style="${"transform-origin: 130px 106px;"}" class="${"octo-arm svelte-18swksg"}"></path><path d="${"M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"}" fill="${"black"}" class="${"octo-body"}"></path></svg></a>
 </header>`;
 });
+var browser = false;
+var dev = false;
 var css$5 = {
-  code: "main.svelte-ovx5r6.svelte-ovx5r6{flex:1;display:flex;flex-direction:column;padding:1rem;width:100%;max-width:1024px;margin:0 auto;box-sizing:border-box}.footer-distributed.svelte-ovx5r6.svelte-ovx5r6{background-color:#292c2f;box-shadow:0 1px 1px 0 rgba(0, 0, 0, 0.12);box-sizing:border-box;width:100%;text-align:left;font:normal 16px sans-serif;padding:45px 50px}.footer-distributed.svelte-ovx5r6 .footer-left p.svelte-ovx5r6{color:#8f9296;font-size:14px;margin:0}.footer-distributed.svelte-ovx5r6 p.footer-links.svelte-ovx5r6{font-size:18px;font-weight:bold;color:#ffffff;margin:0 0 10px;padding:0;transition:ease 0.25s}.footer-distributed.svelte-ovx5r6 p.footer-links a.svelte-ovx5r6{display:block;line-height:1.8;text-decoration:none;color:inherit;transition:ease 0.25s}.footer-distributed.svelte-ovx5r6 .footer-links a.svelte-ovx5r6:before{content:'\xB7';font-size:20px;left:0;color:#fff;display:inline-block;padding-right:5px}.footer-distributed.svelte-ovx5r6 .footer-links .link-1.svelte-ovx5r6:before{content:none}.footer-distributed.svelte-ovx5r6 .footer-right.svelte-ovx5r6{float:right;margin-top:6px;max-width:180px}.footer-distributed.svelte-ovx5r6 .footer-right a.svelte-ovx5r6{display:inline-block;width:35px;height:35px;background-color:#33383b;border-radius:2px;font-size:20px;color:#ffffff;text-align:center;line-height:35px;margin-left:3px;transition:all 0.25s}.footer-distributed.svelte-ovx5r6 .footer-right a.svelte-ovx5r6:hover{transform:scale(1.1);-webkit-transform:scale(1.1)}.footer-distributed.svelte-ovx5r6 p.footer-links a.svelte-ovx5r6:hover{text-decoration:underline}@media(max-width: 600px){.footer-distributed.svelte-ovx5r6 .footer-left.svelte-ovx5r6,.footer-distributed.svelte-ovx5r6 .footer-right.svelte-ovx5r6{text-align:center}.footer-distributed.svelte-ovx5r6 .footer-right.svelte-ovx5r6{float:none;margin:0 auto 20px}.footer-distributed.svelte-ovx5r6 .footer-left p.footer-links.svelte-ovx5r6{line-height:1.8}}",
-  map: `{"version":3,"file":"__layout.svelte","sources":["__layout.svelte"],"sourcesContent":["<script lang=\\"ts\\">import Header from '$lib/header/Header.svelte';\\nimport '../app.css';\\nconst year = new Date().getFullYear();\\n<\/script>\\n\\n<Header />\\n\\n<main>\\n\\t<slot />\\n</main>\\n\\n<footer class=\\"footer-distributed\\">\\n\\t<div class=\\"footer-right\\">\\n\\t\\t<a href=\\"https://twitter.com/alexthings1\\"><i class=\\"fab fa-twitter\\" /></a>\\n\\t\\t<a href=\\"https://github.com/armincerf\\"><i class=\\"fab fa-github\\" /></a>\\n\\t</div>\\n\\n\\t<div class=\\"footer-left\\">\\n\\t\\t<p class=\\"footer-links\\">\\n\\t\\t\\t<a class=\\"link-1\\" href=\\"/kalm-routines-privacy-policy\\">Kalm Routines Privacy Policy</a>\\n\\t\\t\\t<a class=\\"link-1\\" href=\\"/kalm-routines-terms\\">Kalm Routines Terms and Conditions</a>\\n\\t\\t</p>\\n\\n\\t\\t<p>Alex Davis &copy; {year}</p>\\n\\t</div>\\n</footer>\\n\\n<style>\\n\\tmain {\\n\\t\\tflex: 1;\\n\\t\\tdisplay: flex;\\n\\t\\tflex-direction: column;\\n\\t\\tpadding: 1rem;\\n\\t\\twidth: 100%;\\n\\t\\tmax-width: 1024px;\\n\\t\\tmargin: 0 auto;\\n\\t\\tbox-sizing: border-box;\\n\\t}\\n\\n\\t.footer-distributed {\\n\\t\\tbackground-color: #292c2f;\\n\\t\\tbox-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);\\n\\t\\tbox-sizing: border-box;\\n\\t\\twidth: 100%;\\n\\t\\ttext-align: left;\\n\\t\\tfont: normal 16px sans-serif;\\n\\t\\tpadding: 45px 50px;\\n\\t}\\n\\n\\t.footer-distributed .footer-left p {\\n\\t\\tcolor: #8f9296;\\n\\t\\tfont-size: 14px;\\n\\t\\tmargin: 0;\\n\\t}\\n\\t/* Footer links */\\n\\n\\t.footer-distributed p.footer-links {\\n\\t\\tfont-size: 18px;\\n\\t\\tfont-weight: bold;\\n\\t\\tcolor: #ffffff;\\n\\t\\tmargin: 0 0 10px;\\n\\t\\tpadding: 0;\\n\\t\\ttransition: ease 0.25s;\\n\\t}\\n\\n\\t.footer-distributed p.footer-links a {\\n\\t\\tdisplay: block;\\n\\t\\tline-height: 1.8;\\n\\t\\ttext-decoration: none;\\n\\t\\tcolor: inherit;\\n\\t\\ttransition: ease 0.25s;\\n\\t}\\n\\n\\t.footer-distributed .footer-links a:before {\\n\\t\\tcontent: '\xB7';\\n\\t\\tfont-size: 20px;\\n\\t\\tleft: 0;\\n\\t\\tcolor: #fff;\\n\\t\\tdisplay: inline-block;\\n\\t\\tpadding-right: 5px;\\n\\t}\\n\\n\\t.footer-distributed .footer-links .link-1:before {\\n\\t\\tcontent: none;\\n\\t}\\n\\n\\t.footer-distributed .footer-right {\\n\\t\\tfloat: right;\\n\\t\\tmargin-top: 6px;\\n\\t\\tmax-width: 180px;\\n\\t}\\n\\n\\t.footer-distributed .footer-right a {\\n\\t\\tdisplay: inline-block;\\n\\t\\twidth: 35px;\\n\\t\\theight: 35px;\\n\\t\\tbackground-color: #33383b;\\n\\t\\tborder-radius: 2px;\\n\\t\\tfont-size: 20px;\\n\\t\\tcolor: #ffffff;\\n\\t\\ttext-align: center;\\n\\t\\tline-height: 35px;\\n\\t\\tmargin-left: 3px;\\n\\t\\ttransition: all 0.25s;\\n\\t}\\n\\n\\t.footer-distributed .footer-right a:hover {\\n\\t\\ttransform: scale(1.1);\\n\\t\\t-webkit-transform: scale(1.1);\\n\\t}\\n\\n\\t.footer-distributed p.footer-links a:hover {\\n\\t\\ttext-decoration: underline;\\n\\t}\\n\\n\\t/* Media Queries */\\n\\n\\t@media (max-width: 600px) {\\n\\t\\t.footer-distributed .footer-left,\\n\\t\\t.footer-distributed .footer-right {\\n\\t\\t\\ttext-align: center;\\n\\t\\t}\\n\\t\\t.footer-distributed .footer-right {\\n\\t\\t\\tfloat: none;\\n\\t\\t\\tmargin: 0 auto 20px;\\n\\t\\t}\\n\\t\\t.footer-distributed .footer-left p.footer-links {\\n\\t\\t\\tline-height: 1.8;\\n\\t\\t}\\n\\t}\\n</style>\\n"],"names":[],"mappings":"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"}`
+  code: "main.svelte-143k66l.svelte-143k66l{flex:1;display:flex;flex-direction:column;padding:1rem;width:100%;max-width:1024px;margin:0 auto;box-sizing:border-box}.footer-distributed.svelte-143k66l.svelte-143k66l{background-color:#292c2f;box-shadow:0 1px 1px 0 rgba(0, 0, 0, 0.12);box-sizing:border-box;width:100%;text-align:left;font:normal 16px sans-serif;padding:45px 50px;display:flex;flex-direction:row;justify-content:space-between}.footer-distributed.svelte-143k66l .footer-left p.svelte-143k66l{color:#8f9296;font-size:14px;margin:0}.footer-distributed.svelte-143k66l p.footer-links.svelte-143k66l{font-size:18px;font-weight:bold;color:#ffffff;margin:0 0 10px;padding:0;transition:ease 0.25s}.footer-distributed.svelte-143k66l p.footer-links a.svelte-143k66l{display:block;line-height:1.8;text-decoration:none;color:inherit;transition:ease 0.25s;padding-bottom:10px}.footer-distributed.svelte-143k66l .footer-links a.svelte-143k66l:before{content:'\xB7';font-size:20px;left:0;color:#fff;display:inline-block;padding-right:5px}.footer-distributed.svelte-143k66l .footer-links .link-1.svelte-143k66l:before{content:none}.footer-distributed.svelte-143k66l .footer-right a.svelte-143k66l{display:inline-block;width:35px;height:35px;background-color:#33383b;border-radius:2px;font-size:20px;color:#ffffff;text-align:center;line-height:35px;margin-left:3px;transition:all 0.25s}.footer-distributed.svelte-143k66l .footer-right a.svelte-143k66l:hover{transform:scale(1.1);-webkit-transform:scale(1.1)}.footer-distributed.svelte-143k66l p.footer-links a.svelte-143k66l:hover{text-decoration:underline}@media(max-width: 600px){.footer-distributed.svelte-143k66l.svelte-143k66l{flex-direction:column}.footer-distributed.svelte-143k66l .footer-left.svelte-143k66l,.footer-distributed.svelte-143k66l .footer-right.svelte-143k66l{text-align:center;padding-bottom:1em}.footer-distributed.svelte-143k66l .footer-left p.footer-links.svelte-143k66l{line-height:1.8}}",
+  map: `{"version":3,"file":"__layout.svelte","sources":["__layout.svelte"],"sourcesContent":["<script lang=\\"ts\\">import Header from '$lib/header/Header.svelte';\\nimport '../app.css';\\nimport splitbee from '@splitbee/web';\\nimport { browser, dev } from '$app/env';\\nconst year = new Date().getFullYear();\\nif (!dev && browser) {\\n    console.log('hello?', splitbee);\\n    splitbee.init({\\n        token: 'B9S7RRGFG7CU',\\n        scriptUrl: '/bee.js',\\n        apiUrl: '/_hive'\\n    });\\n}\\n<\/script>\\n\\n<Header />\\n\\n<main>\\n\\t<slot />\\n</main>\\n\\n<footer class=\\"footer-distributed\\">\\n\\t<div class=\\"footer-left\\">\\n\\t\\t<p class=\\"footer-links\\">\\n\\t\\t\\t<a class=\\"link-1\\" href=\\"/kalm-routines-privacy-policy\\">Kalm Routines Privacy Policy</a>\\n\\t\\t\\t<a class=\\"link-1\\" href=\\"/kalm-routines-terms\\">Kalm Routines Terms and Conditions</a>\\n\\t\\t</p>\\n\\n\\t\\t<p>Alex Davis &copy; {year}</p>\\n\\t</div>\\n\\t<div class=\\"footer-right\\">\\n\\t\\t<a aria-label=\\"Twitter\\" href=\\"https://twitter.com/alexthings1\\"><i class=\\"fab fa-twitter\\" /></a>\\n\\t\\t<a aria-label=\\"Github\\" href=\\"https://github.com/armincerf\\"><i class=\\"fab fa-github\\" /></a>\\n\\t</div>\\n</footer>\\n\\n<style>\\n\\tmain {\\n\\t\\tflex: 1;\\n\\t\\tdisplay: flex;\\n\\t\\tflex-direction: column;\\n\\t\\tpadding: 1rem;\\n\\t\\twidth: 100%;\\n\\t\\tmax-width: 1024px;\\n\\t\\tmargin: 0 auto;\\n\\t\\tbox-sizing: border-box;\\n\\t}\\n\\n\\t.footer-distributed {\\n\\t\\tbackground-color: #292c2f;\\n\\t\\tbox-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);\\n\\t\\tbox-sizing: border-box;\\n\\t\\twidth: 100%;\\n\\t\\ttext-align: left;\\n\\t\\tfont: normal 16px sans-serif;\\n\\t\\tpadding: 45px 50px;\\n\\t\\tdisplay: flex;\\n\\t\\tflex-direction: row;\\n\\t\\tjustify-content: space-between;\\n\\t}\\n\\n\\t.footer-distributed .footer-left p {\\n\\t\\tcolor: #8f9296;\\n\\t\\tfont-size: 14px;\\n\\t\\tmargin: 0;\\n\\t}\\n\\t/* Footer links */\\n\\n\\t.footer-distributed p.footer-links {\\n\\t\\tfont-size: 18px;\\n\\t\\tfont-weight: bold;\\n\\t\\tcolor: #ffffff;\\n\\t\\tmargin: 0 0 10px;\\n\\t\\tpadding: 0;\\n\\t\\ttransition: ease 0.25s;\\n\\t}\\n\\n\\t.footer-distributed p.footer-links a {\\n\\t\\tdisplay: block;\\n\\t\\tline-height: 1.8;\\n\\t\\ttext-decoration: none;\\n\\t\\tcolor: inherit;\\n\\t\\ttransition: ease 0.25s;\\n\\t\\tpadding-bottom: 10px;\\n\\t}\\n\\n\\t.footer-distributed .footer-links a:before {\\n\\t\\tcontent: '\xB7';\\n\\t\\tfont-size: 20px;\\n\\t\\tleft: 0;\\n\\t\\tcolor: #fff;\\n\\t\\tdisplay: inline-block;\\n\\t\\tpadding-right: 5px;\\n\\t}\\n\\n\\t.footer-distributed .footer-links .link-1:before {\\n\\t\\tcontent: none;\\n\\t}\\n\\n\\t.footer-distributed .footer-right a {\\n\\t\\tdisplay: inline-block;\\n\\t\\twidth: 35px;\\n\\t\\theight: 35px;\\n\\t\\tbackground-color: #33383b;\\n\\t\\tborder-radius: 2px;\\n\\t\\tfont-size: 20px;\\n\\t\\tcolor: #ffffff;\\n\\t\\ttext-align: center;\\n\\t\\tline-height: 35px;\\n\\t\\tmargin-left: 3px;\\n\\t\\ttransition: all 0.25s;\\n\\t}\\n\\n\\t.footer-distributed .footer-right a:hover {\\n\\t\\ttransform: scale(1.1);\\n\\t\\t-webkit-transform: scale(1.1);\\n\\t}\\n\\n\\t.footer-distributed p.footer-links a:hover {\\n\\t\\ttext-decoration: underline;\\n\\t}\\n\\n\\t/* Media Queries */\\n\\n\\t@media (max-width: 600px) {\\n\\t\\t.footer-distributed {\\n\\t\\t\\tflex-direction: column;\\n\\t\\t}\\n\\t\\t.footer-distributed .footer-left,\\n\\t\\t.footer-distributed .footer-right {\\n\\t\\t\\ttext-align: center;\\n\\t\\t\\tpadding-bottom: 1em;\\n\\t\\t}\\n\\n\\t\\t.footer-distributed .footer-left p.footer-links {\\n\\t\\t\\tline-height: 1.8;\\n\\t\\t}\\n\\t}\\n</style>\\n"],"names":[],"mappings":"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"}`
 };
 var _layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const year = new Date().getFullYear();
   $$result.css.add(css$5);
   return `${validate_component(Header, "Header").$$render($$result, {}, {}, {})}
 
-<main class="${"svelte-ovx5r6"}">${slots.default ? slots.default({}) : ``}</main>
+<main class="${"svelte-143k66l"}">${slots.default ? slots.default({}) : ``}</main>
 
-<footer class="${"footer-distributed svelte-ovx5r6"}"><div class="${"footer-right svelte-ovx5r6"}"><a href="${"https://twitter.com/alexthings1"}" class="${"svelte-ovx5r6"}"><i class="${"fab fa-twitter"}"></i></a>
-		<a href="${"https://github.com/armincerf"}" class="${"svelte-ovx5r6"}"><i class="${"fab fa-github"}"></i></a></div>
+<footer class="${"footer-distributed svelte-143k66l"}"><div class="${"footer-left svelte-143k66l"}"><p class="${"footer-links svelte-143k66l"}"><a class="${"link-1 svelte-143k66l"}" href="${"/kalm-routines-privacy-policy"}">Kalm Routines Privacy Policy</a>
+			<a class="${"link-1 svelte-143k66l"}" href="${"/kalm-routines-terms"}">Kalm Routines Terms and Conditions</a></p>
 
-	<div class="${"footer-left svelte-ovx5r6"}"><p class="${"footer-links svelte-ovx5r6"}"><a class="${"link-1 svelte-ovx5r6"}" href="${"/kalm-routines-privacy-policy"}">Kalm Routines Privacy Policy</a>
-			<a class="${"link-1 svelte-ovx5r6"}" href="${"/kalm-routines-terms"}">Kalm Routines Terms and Conditions</a></p>
-
-		<p class="${"svelte-ovx5r6"}">Alex Davis \xA9 ${escape2(year)}</p></div>
+		<p class="${"svelte-143k66l"}">Alex Davis \xA9 ${escape2(year)}</p></div>
+	<div class="${"footer-right svelte-143k66l"}"><a aria-label="${"Twitter"}" href="${"https://twitter.com/alexthings1"}" class="${"svelte-143k66l"}"><i class="${"fab fa-twitter"}"></i></a>
+		<a aria-label="${"Github"}" href="${"https://github.com/armincerf"}" class="${"svelte-143k66l"}"><i class="${"fab fa-github"}"></i></a></div>
 </footer>`;
 });
 var __layout = /* @__PURE__ */ Object.freeze({
@@ -2908,7 +3042,7 @@ var logo = "/_app/assets/kalm.30883f25.png";
 var logoWebp = "/_app/assets/kalm.bfdd4afd.webp";
 var css$4 = {
   code: "section.svelte-z1l1xi.svelte-z1l1xi{display:flex;flex-direction:column;justify-content:center;align-items:center;flex:1}h1.svelte-z1l1xi.svelte-z1l1xi{width:100%}.welcome.svelte-z1l1xi.svelte-z1l1xi{position:relative;width:100%;height:0;padding:0 0 calc(100% * 495 / 2048) 0}.welcome.svelte-z1l1xi img.svelte-z1l1xi{position:absolute;object-fit:contain;width:100%;height:100%;top:0;display:block}",
-  map: `{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<script context=\\"module\\" lang=\\"ts\\">export const prerender = true;\\n<\/script>\\n\\n<script lang=\\"ts\\">import logo from '../../static/kalm.png';\\nimport logoWebp from '../../static/kalm.webp';\\nimport panikLogo from '../../static/extraPanik.png';\\nimport panikLogoWebp from '../../static/extraPanik.webp';\\nlet kalmImg = logo;\\nlet kalmWebp = logoWebp;\\nconst enterLogo = () => (kalmImg = panikLogo);\\nconst exitLogo = () => (kalmImg = logo);\\nconst enterLogop = () => (kalmWebp = panikLogoWebp);\\nconst exitLogop = () => (kalmWebp = logoWebp);\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>Home</title>\\n</svelte:head>\\n\\n<section>\\n\\t<h1>\\n\\t\\t<div class=\\"welcome\\">\\n\\t\\t\\t<picture>\\n\\t\\t\\t\\t<source\\n\\t\\t\\t\\t\\tsrcset={kalmWebp}\\n\\t\\t\\t\\t\\ton:mouseleave={exitLogop}\\n\\t\\t\\t\\t\\ton:mouseenter={enterLogop}\\n\\t\\t\\t\\t\\ttype=\\"image/webp\\"\\n\\t\\t\\t\\t/>\\n\\t\\t\\t\\t<img src={kalmImg} on:mouseleave={exitLogop} on:mouseenter={enterLogop} alt=\\"Welcome\\" />\\n\\t\\t\\t</picture>\\n\\t\\t</div>\\n\\n\\t\\tWelcome to Kalm.Life\\n\\t</h1>\\n\\n\\t<h2>\\n\\t\\tThis is a minimal template site for my app, Kalm Routines. <br /> More will be added here later,\\n\\t\\tbut for now see\\n\\t\\t<a target=\\"_blank\\" href=\\"\\">this blog post.</a>\\n\\t</h2>\\n</section>\\n\\n<style>\\n\\tsection {\\n\\t\\tdisplay: flex;\\n\\t\\tflex-direction: column;\\n\\t\\tjustify-content: center;\\n\\t\\talign-items: center;\\n\\t\\tflex: 1;\\n\\t}\\n\\n\\th1 {\\n\\t\\twidth: 100%;\\n\\t}\\n\\n\\t.welcome {\\n\\t\\tposition: relative;\\n\\t\\twidth: 100%;\\n\\t\\theight: 0;\\n\\t\\tpadding: 0 0 calc(100% * 495 / 2048) 0;\\n\\t}\\n\\n\\t.welcome img {\\n\\t\\tposition: absolute;\\n\\t\\tobject-fit: contain;\\n\\t\\twidth: 100%;\\n\\t\\theight: 100%;\\n\\t\\ttop: 0;\\n\\t\\tdisplay: block;\\n\\t}\\n</style>\\n"],"names":[],"mappings":"AA4CC,OAAO,4BAAC,CAAC,AACR,OAAO,CAAE,IAAI,CACb,cAAc,CAAE,MAAM,CACtB,eAAe,CAAE,MAAM,CACvB,WAAW,CAAE,MAAM,CACnB,IAAI,CAAE,CAAC,AACR,CAAC,AAED,EAAE,4BAAC,CAAC,AACH,KAAK,CAAE,IAAI,AACZ,CAAC,AAED,QAAQ,4BAAC,CAAC,AACT,QAAQ,CAAE,QAAQ,CAClB,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,CAAC,CACT,OAAO,CAAE,CAAC,CAAC,CAAC,CAAC,KAAK,IAAI,CAAC,CAAC,CAAC,GAAG,CAAC,CAAC,CAAC,IAAI,CAAC,CAAC,CAAC,AACvC,CAAC,AAED,sBAAQ,CAAC,GAAG,cAAC,CAAC,AACb,QAAQ,CAAE,QAAQ,CAClB,UAAU,CAAE,OAAO,CACnB,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,CACZ,GAAG,CAAE,CAAC,CACN,OAAO,CAAE,KAAK,AACf,CAAC"}`
+  map: `{"version":3,"file":"index.svelte","sources":["index.svelte"],"sourcesContent":["<script context=\\"module\\" lang=\\"ts\\">export const prerender = true;\\n<\/script>\\n\\n<script lang=\\"ts\\">import logo from '../../static/kalm.png';\\nimport logoWebp from '../../static/kalm.webp';\\nimport panikLogo from '../../static/extraPanik.png';\\nimport panikLogoWebp from '../../static/extraPanik.webp';\\nlet kalmImg = logo;\\nlet kalmWebp = logoWebp;\\nconst enterLogo = () => (kalmImg = panikLogo);\\nconst exitLogo = () => (kalmImg = logo);\\nconst enterLogop = () => (kalmWebp = panikLogoWebp);\\nconst exitLogop = () => (kalmWebp = logoWebp);\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>Home</title>\\n</svelte:head>\\n\\n<section>\\n\\t<h1>\\n\\t\\t<div class=\\"welcome\\">\\n\\t\\t\\t<picture>\\n\\t\\t\\t\\t<source\\n\\t\\t\\t\\t\\tsrcset={kalmWebp}\\n\\t\\t\\t\\t\\ton:mouseleave={exitLogop}\\n\\t\\t\\t\\t\\ton:mouseenter={enterLogop}\\n\\t\\t\\t\\t\\ttype=\\"image/webp\\"\\n\\t\\t\\t\\t/>\\n\\t\\t\\t\\t<img src={kalmImg} on:mouseleave={exitLogop} on:mouseenter={enterLogop} alt=\\"Welcome\\" />\\n\\t\\t\\t</picture>\\n\\t\\t</div>\\n\\n\\t\\tWelcome to Kalm.Life\\n\\t</h1>\\n\\n\\t<h2>\\n\\t\\tThis is a minimal template site for my app, Kalm Routines. <br /> More will be added here later,\\n\\t\\tbut for now see\\n\\t\\t<a\\n\\t\\t\\ttarget=\\"_blank\\"\\n\\t\\t\\trel=\\"noopener\\"\\n\\t\\t\\thref=\\"https://www.armincerf.com/2021/07/making-a-mobile-app-with-clojurescript-in-2021\\"\\n\\t\\t\\t>this blog post.</a\\n\\t\\t>\\n\\t</h2>\\n</section>\\n\\n<style>\\n\\tsection {\\n\\t\\tdisplay: flex;\\n\\t\\tflex-direction: column;\\n\\t\\tjustify-content: center;\\n\\t\\talign-items: center;\\n\\t\\tflex: 1;\\n\\t}\\n\\n\\th1 {\\n\\t\\twidth: 100%;\\n\\t}\\n\\n\\t.welcome {\\n\\t\\tposition: relative;\\n\\t\\twidth: 100%;\\n\\t\\theight: 0;\\n\\t\\tpadding: 0 0 calc(100% * 495 / 2048) 0;\\n\\t}\\n\\n\\t.welcome img {\\n\\t\\tposition: absolute;\\n\\t\\tobject-fit: contain;\\n\\t\\twidth: 100%;\\n\\t\\theight: 100%;\\n\\t\\ttop: 0;\\n\\t\\tdisplay: block;\\n\\t}\\n</style>\\n"],"names":[],"mappings":"AAiDC,OAAO,4BAAC,CAAC,AACR,OAAO,CAAE,IAAI,CACb,cAAc,CAAE,MAAM,CACtB,eAAe,CAAE,MAAM,CACvB,WAAW,CAAE,MAAM,CACnB,IAAI,CAAE,CAAC,AACR,CAAC,AAED,EAAE,4BAAC,CAAC,AACH,KAAK,CAAE,IAAI,AACZ,CAAC,AAED,QAAQ,4BAAC,CAAC,AACT,QAAQ,CAAE,QAAQ,CAClB,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,CAAC,CACT,OAAO,CAAE,CAAC,CAAC,CAAC,CAAC,KAAK,IAAI,CAAC,CAAC,CAAC,GAAG,CAAC,CAAC,CAAC,IAAI,CAAC,CAAC,CAAC,AACvC,CAAC,AAED,sBAAQ,CAAC,GAAG,cAAC,CAAC,AACb,QAAQ,CAAE,QAAQ,CAClB,UAAU,CAAE,OAAO,CACnB,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,CACZ,GAAG,CAAE,CAAC,CACN,OAAO,CAAE,KAAK,AACf,CAAC"}`
 };
 var prerender$3 = true;
 var Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -2925,7 +3059,7 @@ var Routes = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 
 	<h2>This is a minimal template site for my app, Kalm Routines. <br> More will be added here later,
 		but for now see
-		<a target="${"_blank"}" href="${""}">this blog post.</a></h2>
+		<a target="${"_blank"}" rel="${"noopener"}" href="${"https://www.armincerf.com/2021/07/making-a-mobile-app-with-clojurescript-in-2021"}">this blog post.</a></h2>
 </section>`;
 });
 var index$1 = /* @__PURE__ */ Object.freeze({
@@ -2934,8 +3068,6 @@ var index$1 = /* @__PURE__ */ Object.freeze({
   "default": Routes,
   prerender: prerender$3
 });
-var browser = false;
-var dev = false;
 var css$3 = {
   code: "h2.svelte-1bz253i{font-weight:800;font-size:large}.content.svelte-1bz253i{width:100%;max-width:var(--column-width);margin:var(--column-margin-top) auto 0 auto}",
   map: `{"version":3,"file":"kalm-routines-privacy-policy.svelte","sources":["kalm-routines-privacy-policy.svelte"],"sourcesContent":["<script context=\\"module\\">\\n\\timport { browser, dev } from '$app/env';\\n\\n\\t// we don't need any JS on this page, though we'll load\\n\\t// it in dev so that we get hot module replacement...\\n\\texport const hydrate = dev;\\n\\n\\t// ...but if the client-side router is already loaded\\n\\t// (i.e. we came here from elsewhere in the app), use it\\n\\texport const router = browser;\\n\\n\\t// since there's no dynamic data here, we can prerender\\n\\t// it so that it gets served as a static asset in prod\\n\\texport const prerender = true;\\n<\/script>\\n\\n<svelte:head>\\n\\t<title>About</title>\\n</svelte:head>\\n\\n<article class=\\"content\\">\\n\\t<h1>Privacy Policy</h1>\\n\\t<p>\\n\\t\\tAlex Davis built the Kalm Routines app as an Open Source app. This SERVICE is provided by Alex\\n\\t\\tDavis at no cost and is intended for use as is.\\n\\t</p>\\n\\t<p>\\n\\t\\tThis page is used to inform visitors regarding my policies with the collection, use, and\\n\\t\\tdisclosure of Personal Information if anyone decided to use my Service.\\n\\t</p>\\n\\t<p>\\n\\t\\tIf you choose to use my Service, then you agree to the collection and use of information in\\n\\t\\trelation to this policy. The Personal Information that I collect is used for providing and\\n\\t\\timproving the Service. I will not use or share your information with anyone except as described\\n\\t\\tin this Privacy Policy.\\n\\t</p>\\n\\t<p>\\n\\t\\tThe terms used in this Privacy Policy have the same meanings as in our Terms and Conditions,\\n\\t\\twhich is accessible at Kalm Routines unless otherwise defined in this Privacy Policy.\\n\\t</p>\\n\\t<h2>Information Collection and Use</h2>\\n\\t<p>\\n\\t\\tFor a better experience, while using our Service, I may require you to provide us with certain\\n\\t\\tpersonally identifiable information, including but not limited to None. The information that I\\n\\t\\trequest will be retained on your device and is not collected by me in any way.\\n\\t</p>\\n\\t<div>\\n\\t\\t<p>The app does use third party services that may collect information used to identify you.</p>\\n\\t\\t<p>Link to privacy policy of third party service providers used by the app</p>\\n\\t\\t<ul>\\n\\t\\t\\t<li>\\n\\t\\t\\t\\t<a href=\\"https://www.google.com/policies/privacy/\\" target=\\"_blank\\" rel=\\"noopener noreferrer\\"\\n\\t\\t\\t\\t\\t>Google Play Services</a\\n\\t\\t\\t\\t>\\n\\t\\t\\t</li>\\n\\t\\t\\t<!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->\\n\\t\\t</ul>\\n\\t</div>\\n\\t<h2>Log Data</h2>\\n\\t<p>\\n\\t\\tI want to inform you that whenever you use my Service, in a case of an error in the app I\\n\\t\\tcollect data and information (through third party products) on your phone called Log Data. This\\n\\t\\tLog Data may include information such as your device Internet Protocol (\u201CIP\u201D) address, device\\n\\t\\tname, operating system version, the configuration of the app when utilizing my Service, the time\\n\\t\\tand date of your use of the Service, and other statistics.\\n\\t</p>\\n\\t<h2>Cookies</h2>\\n\\t<p>\\n\\t\\tCookies are files with a small amount of data that are commonly used as anonymous unique\\n\\t\\tidentifiers. These are sent to your browser from the websites that you visit and are stored on\\n\\t\\tyour device's internal memory.\\n\\t</p>\\n\\t<p>\\n\\t\\tThis Service does not use these \u201Ccookies\u201D explicitly. However, the app may use third party code\\n\\t\\tand libraries that use \u201Ccookies\u201D to collect information and improve their services. You have the\\n\\t\\toption to either accept or refuse these cookies and know when a cookie is being sent to your\\n\\t\\tdevice. If you choose to refuse our cookies, you may not be able to use some portions of this\\n\\t\\tService.\\n\\t</p>\\n\\t<h2>Service Providers</h2>\\n\\t<p>I may employ third-party companies and individuals due to the following reasons:</p>\\n\\t<ul>\\n\\t\\t<li>To facilitate our Service;</li>\\n\\t\\t<li>To provide the Service on our behalf;</li>\\n\\t\\t<li>To perform Service-related services; or</li>\\n\\t\\t<li>To assist us in analyzing how our Service is used.</li>\\n\\t</ul>\\n\\t<p>\\n\\t\\tI want to inform users of this Service that these third parties have access to your Personal\\n\\t\\tInformation. The reason is to perform the tasks assigned to them on our behalf. However, they\\n\\t\\tare obligated not to disclose or use the information for any other purpose.\\n\\t</p>\\n\\t<h2>Security</h2>\\n\\t<p>\\n\\t\\tI value your trust in providing us your Personal Information, thus we are striving to use\\n\\t\\tcommercially acceptable means of protecting it. But remember that no method of transmission over\\n\\t\\tthe internet, or method of electronic storage is 100% secure and reliable, and I cannot\\n\\t\\tguarantee its absolute security.\\n\\t</p>\\n\\t<h2>Links to Other Sites</h2>\\n\\t<p>\\n\\t\\tThis Service may contain links to other sites. If you click on a third-party link, you will be\\n\\t\\tdirected to that site. Note that these external sites are not operated by me. Therefore, I\\n\\t\\th2ly advise you to review the Privacy Policy of these websites. I have no control over and\\n\\t\\tassume no responsibility for the content, privacy policies, or practices of any third-party\\n\\t\\tsites or services.\\n\\t</p>\\n\\t<h2>Children\u2019s Privacy</h2>\\n\\t<p>\\n\\t\\tThese Services do not address anyone under the age of 13. I do not knowingly collect personally\\n\\t\\tidentifiable information from children under 13 years of age. In the case I discover that a\\n\\t\\tchild under 13 has provided me with personal information, I immediately delete this from our\\n\\t\\tservers. If you are a parent or guardian and you are aware that your child has provided us with\\n\\t\\tpersonal information, please contact me so that I will be able to do necessary actions.\\n\\t</p>\\n\\t<h2>Changes to This Privacy Policy</h2>\\n\\t<p>\\n\\t\\tI may update our Privacy Policy from time to time. Thus, you are advised to review this page\\n\\t\\tperiodically for any changes. I will notify you of any changes by posting the new Privacy Policy\\n\\t\\ton this page.\\n\\t</p>\\n\\t<p>This policy is effective as of 2021-08-08</p>\\n\\t<h2>Contact Us</h2>\\n\\t<p>\\n\\t\\tIf you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me\\n\\t\\tat kalm@alexd.uk.\\n\\t</p>\\n</article>\\n\\n<style>\\n\\th2 {\\n\\t\\tfont-weight: 800;\\n\\t\\tfont-size: large;\\n\\t}\\n\\t.content {\\n\\t\\twidth: 100%;\\n\\t\\tmax-width: var(--column-width);\\n\\t\\tmargin: var(--column-margin-top) auto 0 auto;\\n\\t}\\n</style>\\n"],"names":[],"mappings":"AAkIC,EAAE,eAAC,CAAC,AACH,WAAW,CAAE,GAAG,CAChB,SAAS,CAAE,KAAK,AACjB,CAAC,AACD,QAAQ,eAAC,CAAC,AACT,KAAK,CAAE,IAAI,CACX,SAAS,CAAE,IAAI,cAAc,CAAC,CAC9B,MAAM,CAAE,IAAI,mBAAmB,CAAC,CAAC,IAAI,CAAC,CAAC,CAAC,IAAI,AAC7C,CAAC"}`

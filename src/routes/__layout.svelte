@@ -1,7 +1,20 @@
 <script lang="ts">
 	import Header from '$lib/header/Header.svelte';
 	import '../app.css';
+	import splitbee from '@splitbee/web';
+	import { browser, dev } from '$app/env';
+
 	const year = new Date().getFullYear();
+
+	if (!dev && browser) {
+		console.log('hello?', splitbee);
+		
+		splitbee.init({
+			token: 'B9S7RRGFG7CU',
+			scriptUrl: '/bee.js',
+			apiUrl: '/_hive'
+		});
+	}
 </script>
 
 <Header />
@@ -23,7 +36,6 @@
 		<a aria-label="Twitter" href="https://twitter.com/alexthings1"><i class="fab fa-twitter" /></a>
 		<a aria-label="Github" href="https://github.com/armincerf"><i class="fab fa-github" /></a>
 	</div>
-
 </footer>
 
 <style>
