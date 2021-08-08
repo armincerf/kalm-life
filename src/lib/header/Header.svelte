@@ -50,7 +50,6 @@
 	header {
 		display: flex;
 		justify-content: center;
-		padding-left: 1em;
 	}
 
 	@keyframes octocat-wave {

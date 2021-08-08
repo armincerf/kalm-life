@@ -31,7 +31,6 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.2.2",
     "@lukeed/uuid": "^2.0.0",
-    "@splitbee/web": "^0.2.4",
     "cookie": "^0.4.1"
   }
 }
