@@ -20,8 +20,8 @@
 		<p>Alex Davis &copy; {year}</p>
 	</div>
 	<div class="footer-right">
-		<a href="https://twitter.com/alexthings1"><i class="fab fa-twitter" /></a>
-		<a href="https://github.com/armincerf"><i class="fab fa-github" /></a>
+		<a aria-label="Twitter" href="https://twitter.com/alexthings1"><i class="fab fa-twitter" /></a>
+		<a aria-label="Github" href="https://github.com/armincerf"><i class="fab fa-github" /></a>
 	</div>
 
 </footer>

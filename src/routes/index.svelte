@@ -42,6 +42,7 @@
 		but for now see
 		<a
 			target="_blank"
+			rel="noopener"
 			href="https://www.armincerf.com/2021/07/making-a-mobile-app-with-clojurescript-in-2021"
 			>this blog post.</a
 		>
