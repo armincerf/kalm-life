@@ -10,10 +10,14 @@
 
 	let kalmImg = logo;
 	let kalmWebp = logoWebp;
-	const enterLogo = () => (kalmImg = panikLogo);
-	const exitLogo = () => (kalmImg = logo);
-	const enterLogop = () => (kalmWebp = panikLogoWebp);
-	const exitLogop = () => (kalmWebp = logoWebp);
+	const enterLogo = () => {
+		kalmWebp = panikLogoWebp;
+		kalmImg = panikLogo;
+	};
+	const exitLogo = () => {
+		kalmImg = logo;
+		kalmWebp = logoWebp;
+	};
 </script>
 
 <svelte:head>
@@ -24,17 +28,12 @@
 	<h1>
 		<div class="welcome">
 			<picture>
-				<source
-					srcset={kalmWebp}
-					on:mouseleave={exitLogop}
-					on:mouseenter={enterLogop}
-					type="image/webp"
-				/>
-				<img src={kalmImg} on:mouseleave={exitLogop} on:mouseenter={enterLogop} alt="Welcome" />
+				<source srcset={kalmWebp} type="image/webp" />
+				<img src={kalmImg} on:mouseleave={exitLogo} on:mouseenter={enterLogo} alt="Welcome" />
 			</picture>
 		</div>
 
-		Welcome to Kalm.Life
+		Hi.
 	</h1>
 
 	<h2>
@@ -44,8 +43,21 @@
 			target="_blank"
 			rel="noopener"
 			href="https://www.armincerf.com/2021/07/making-a-mobile-app-with-clojurescript-in-2021"
-			>this blog post.</a
-		>
+			>this blog post
+		</a>
+		<br/>or checkout the Kalm Routines app on the app stores:
+		<div class="badges">
+			<a href="https://itunes.apple.com/app/kalm-routines/id1578270343"
+				><img class="app-store-badge" src="/app-store-badge.png" alt="Download on the app store" />
+			</a>
+			<a href="https://play.google.com/store/apps/details?id=com.armincerf.kalm_routines"
+				><img
+					class="google-play-badge"
+					src="/play-store-badge.png"
+					alt="Download on the play store"
+				/>
+			</a>
+		</div>
 	</h2>
 </section>
 
@@ -60,6 +72,37 @@
 
 	h1 {
 		width: 100%;
+	}
+
+	.badges {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		margin-top: 20px;
+		cursor: pointer;
+	}
+
+	.badges img {
+		max-height: 50px;
+		margin: 10px;
+		border-radius: 5px;
+		transition: box-shadow 200ms;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	@media (max-width: 414px) {
+		.badges img {
+			max-height: 40px;
+		}
+	}
+
+	.badges img:hover {
+		box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+	}
+
+	.badges img:active {
+		transform: scale(0.98);
 	}
 
 	.welcome {
