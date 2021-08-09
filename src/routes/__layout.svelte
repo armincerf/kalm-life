@@ -1,7 +1,15 @@
 <script lang="ts">
 	import Header from '$lib/header/Header.svelte';
 	import '../app.css';
+	import splitbee from '@splitbee/web';
+	import { browser, dev } from '$app/env';
 	const year = new Date().getFullYear();
+	if (!dev && browser) {
+		splitbee.init({
+			scriptUrl: 'https://www.armincerf.com/bee.js',
+			apiUrl: 'https://www.armincerf.com/_hive'
+		});
+	}
 </script>
 
 <Header />

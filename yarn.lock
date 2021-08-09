@@ -98,6 +98,11 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@splitbee/web@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@splitbee/web/-/web-0.2.4.tgz#173ffab42a9c4d22874d82cd580d2c114480b93f"
+  integrity sha512-LMXnN5X/jen4ssBZ8ULXckQgJVvv8Ox2brcK7g2aLrok8ISzO76+DC0b6Cierk8oIXcx/+aflbVuBaKKFqyBCg==
+
 "@sveltejs/adapter-vercel@next":
   version "1.0.0-next.27"
   resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.27.tgz#0e8449b5550136c09976a51dc971fb481d06c25c"
